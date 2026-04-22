@@ -10,6 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
 import { investors } from '../../data/users';
+import { useMeetings } from '../../context/CalenderContext';
 
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -23,6 +24,8 @@ export const EntrepreneurDashboard: React.FC = () => {
       setCollaborationRequests(requests);
     }
   }, [user]);
+
+  const { meetings } = useMeetings();
   
   const handleRequestStatusUpdate = (requestId: string, status: 'accepted' | 'rejected') => {
     setCollaborationRequests(prevRequests => 
@@ -93,7 +96,7 @@ export const EntrepreneurDashboard: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-accent-700">Upcoming Meetings</p>
-                <h3 className="text-xl font-semibold text-accent-900">2</h3>
+                <h3 className="text-xl font-semibold text-accent-900">{meetings.length}</h3>
               </div>
             </div>
           </CardBody>
