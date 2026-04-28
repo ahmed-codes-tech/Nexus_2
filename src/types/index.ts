@@ -38,7 +38,7 @@ export interface Message {
   receiverId: string;
   content: string;
   timestamp: string;
-  isRead: boolean;
+  isSystemMessage?: boolean; // Add this optional property
 }
 
 export interface ChatConversation {

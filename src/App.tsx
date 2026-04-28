@@ -24,10 +24,12 @@ import { EntrepreneursPage } from './pages/entrepreneurs/EntrepreneursPage';
 import { MessagesPage } from './pages/messages/MessagesPage';
 import { NotificationsPage } from './pages/notifications/NotificationsPage';
 import { DocumentsPage } from './pages/documents/DocumentsPage';
+import { DocumentChamber } from './components/documents/DocumentChamber';
 import { SettingsPage } from './pages/settings/SettingsPage';
 import { HelpPage } from './pages/help/HelpPage';
 import { DealsPage } from './pages/deals/DealsPage';
 
+import { PaymentSection } from './components/payments/PaymentSection';
 // Chat Pages
 import { ChatPage } from './pages/chat/ChatPage';
 import { CalendarPage } from './pages/calendar/CalendarPage';
@@ -74,6 +76,10 @@ function App() {
           <Route path="/documents" element={<DashboardLayout />}>
             <Route index element={<DocumentsPage />} />
           </Route>
+
+          <Route path="/payments" element={<PaymentSection />} />
+
+          <Route path="/documents" element={<DocumentChamber />} />
 
           <Route path="/calendar" element={<DashboardLayout />}>
             <Route index element={<CalendarPage />} />

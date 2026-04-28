@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle } from 'lucide-react';
+import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle, Wallet } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -11,11 +11,14 @@ import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
 import { investors } from '../../data/users';
 import { useMeetings } from '../../context/CalenderContext';
+import { PaymentSection } from '../../components/payments/PaymentSection';
 
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
   const [recommendedInvestors, setRecommendedInvestors] = useState(investors.slice(0, 3));
+  const [showPaymentSection, setShowPaymentSection] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(23180.25);
   
   useEffect(() => {
     if (user) {
@@ -35,26 +38,54 @@ export const EntrepreneurDashboard: React.FC = () => {
     );
   };
   
+  const updateWalletBalance = (newBalance: number) => {
+    setWalletBalance(newBalance);
+  };
+  
   if (!user) return null;
   
   const pendingRequests = collaborationRequests.filter(req => req.status === 'pending');
   
+  // Show payment section if enabled
+  if (showPaymentSection) {
+    return <PaymentSection onBack={() => setShowPaymentSection(false)} />;
+  }
+  
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in p-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user.name}</h1>
           <p className="text-gray-600">Here's what's happening with your startup today</p>
         </div>
         
-        <Link to="/investors">
-          <Button
-            leftIcon={<PlusCircle size={18} />}
-          >
-            Find Investors
-          </Button>
-        </Link>
+        <div className="flex gap-3">
+          <Link to="/investors">
+            <Button leftIcon={<PlusCircle size={18} />}>
+              Find Investors
+            </Button>
+          </Link>
+        </div>
       </div>
+      
+      {/* Wallet Balance Card - Clickable */}
+      <Card 
+        className="bg-gradient-to-r from-blue-600 to-blue-700 text-white cursor-pointer hover:shadow-lg transition-all"
+        onClick={() => setShowPaymentSection(true)}
+      >
+        <CardBody className="flex justify-between items-center">
+          <div>
+            <p className="text-blue-100 text-sm">Wallet Balance</p>
+            <p className="text-3xl font-bold mt-1">
+              ${walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+            <p className="text-blue-100 text-xs mt-2">Click to manage payments →</p>
+          </div>
+          <div className="bg-blue-500 bg-opacity-30 p-3 rounded-full">
+            <Wallet size={40} className="text-white" />
+          </div>
+        </CardBody>
+      </Card>
       
       {/* Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
